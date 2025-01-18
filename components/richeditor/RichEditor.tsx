@@ -1,5 +1,5 @@
 'use client';
-// import parse from 'html-react-parser';
+import parse from 'html-react-parser';
 
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
