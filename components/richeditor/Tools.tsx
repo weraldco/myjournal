@@ -1,4 +1,4 @@
-import { BubbleMenu, ChainedCommands, Editor } from '@tiptap/react';
+import { ChainedCommands, Editor } from '@tiptap/react';
 import React, { ChangeEventHandler } from 'react';
 import {
 	BiAlignLeft,
@@ -7,20 +7,16 @@ import {
 	BiBold,
 	BiCodeAlt,
 	BiCodeCurly,
-	BiImage,
 	BiItalic,
 	BiListOl,
 	BiListUl,
 	BiStrikethrough,
 	BiUnderline,
 } from 'react-icons/bi';
-import LinkEditForm from './LinkEditForm';
-import LinkForm from './LinkForm';
 import ToolButton from './ToolButton';
 
 interface Props {
 	editor: Editor | null;
-	onImageSelection?(): void;
 }
 
 const tools = [
@@ -68,10 +64,6 @@ const tools = [
 		task: 'bulletList',
 		icon: <BiListUl />,
 	},
-	{
-		task: 'image',
-		icon: <BiImage />,
-	},
 ] as const;
 
 const headingOptions = [
@@ -93,7 +85,7 @@ const chainMethod = (
 type TaskType = (typeof tools)[number]['task'];
 type HeadingType = (typeof headingOptions)[number]['task'];
 
-export default function Tools({ editor, onImageSelection }: Props) {
+export default function Tools({ editor }: Props) {
 	const handleOnClick = (task: TaskType) => {
 		switch (task) {
 			case 'bold':
@@ -119,15 +111,9 @@ export default function Tools({ editor, onImageSelection }: Props) {
 				return chainMethod(editor, (chain) => chain.setTextAlign('center'));
 			case 'right':
 				return chainMethod(editor, (chain) => chain.setTextAlign('right'));
-			case 'image':
-				return onImageSelection && onImageSelection();
 		}
 	};
 
-	const getInitialLink = () => {
-		const attributes = editor?.getAttributes('link');
-		if (attributes) return attributes.href;
-	};
 	const handleHeadingSelection: ChangeEventHandler<HTMLSelectElement> = ({
 		target,
 	}) => {
@@ -160,16 +146,6 @@ export default function Tools({ editor, onImageSelection }: Props) {
 		return result;
 	};
 
-	const handleLinkSubmission = (href: string) => {
-		if (href === '') {
-			editor?.chain().focus().extendMarkRange('link').unsetLink().run();
-
-			return;
-		}
-
-		// update link
-		editor?.chain().focus().extendMarkRange('link').setLink({ href }).run();
-	};
 	return (
 		<div className="flex items-start space-x-1">
 			<select
@@ -185,18 +161,6 @@ export default function Tools({ editor, onImageSelection }: Props) {
 					);
 				})}
 			</select>
-			<LinkForm onSubmit={handleLinkSubmission} />
-
-			<BubbleMenu
-				editor={editor}
-				shouldShow={({ editor }) => editor.isActive('link')}
-			>
-				<LinkEditForm
-					inititalState={getInitialLink()}
-					onSubmit={handleLinkSubmission}
-				/>
-				{/* <div className="bg-gray-200 w-96 p-2 rounded shadow-md z-50"></div> */}
-			</BubbleMenu>
 
 			{tools.map(({ icon, task }, i) => {
 				return (

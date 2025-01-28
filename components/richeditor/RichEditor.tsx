@@ -1,15 +1,12 @@
 'use client';
-import parse from 'html-react-parser';
 
-import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
 import { EditorContent, JSONContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { useEffect, useState } from 'react';
-import ImageGallery from './ImageGallery';
+import { useEffect } from 'react';
 import Tools from './Tools';
 
 interface Props {
@@ -18,18 +15,11 @@ interface Props {
 }
 
 const RichEditor = ({ onValueChange, content }: Props) => {
-	const [showImageGallery, setShowImageGallery] = useState(false);
-
 	const editor = useEditor({
 		extensions: [
 			StarterKit,
 			Underline,
-			Image.configure({
-				inline: false,
-				HTMLAttributes: {
-					class: 'w-[80%] mx-auto',
-				},
-			}),
+
 			Link.configure({
 				openOnClick: false,
 				autolink: false,
@@ -62,22 +52,12 @@ const RichEditor = ({ onValueChange, content }: Props) => {
 			editor?.destroy();
 		};
 	}, [editor]);
-	const onImageSelect = (image: string) => {
-		editor
-			?.chain()
-			.focus()
-			.setImage({ src: image, alt: 'This is alt sample' })
-			.run();
-	};
 
 	return (
 		<>
 			<div className=" flex flex-col space-y-4  justify-center">
 				<div className="sticky top-0 bg-white z-50 flex items-center justify-center border-b border-gray-600">
-					<Tools
-						editor={editor}
-						onImageSelection={() => setShowImageGallery(true)}
-					/>
+					<Tools editor={editor} />
 				</div>
 				<div className="flex-1 ">
 					<EditorContent editor={editor} className="min-h-[200px] " />
@@ -95,11 +75,6 @@ const RichEditor = ({ onValueChange, content }: Props) => {
 					</button>
 				</div> */}
 			</div>
-			<ImageGallery
-				onSelect={onImageSelect}
-				visible={showImageGallery}
-				onClose={setShowImageGallery}
-			/>
 		</>
 	);
 };

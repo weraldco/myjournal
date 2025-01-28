@@ -1,14 +1,10 @@
 'use client';
 // import { addNewBlogPost } from '@/actions/postActions';
-import ImageGallery from '@/components/richeditor/ImageGallery';
 
 import { default as RichEditor } from '@/components/richeditor/RichEditor';
 import { JSONContent } from '@tiptap/react';
-import Image from 'next/image';
 import React, { useState } from 'react';
 const AddPostForm = () => {
-	const [showImageGallery, setShowImageGallery] = useState(false);
-	const [selectedImage, setSelectedImage] = useState('');
 	const [title, setTitle] = useState('');
 	const [htmlContent, setHtmlContent] = useState('');
 	const [jsonContent, setJsonContent] = useState('');
@@ -26,21 +22,11 @@ const AddPostForm = () => {
 		event.preventDefault();
 		const formData = new FormData();
 		formData.append('title', title);
-		formData.append('img-url', selectedImage);
 		formData.append('htmlContent', htmlContent);
 		formData.append('jsonContent', jsonContent);
 
 		// await addNewBlogPost(formData);
 	};
-
-	const handleOnclick = () => {
-		setShowImageGallery(true);
-	};
-	const onImageSelect = (image: string) => {
-		setSelectedImage(image);
-	};
-
-	console.log(selectedImage);
 
 	return (
 		<div>
@@ -61,25 +47,7 @@ const AddPostForm = () => {
 						id="title"
 					/>
 				</div>
-				<label
-					onClick={handleOnclick}
-					htmlFor="title"
-					className="text-sm text-gray-600 cursor-pointer"
-				>
-					Upload Image Banner (click here)
-				</label>
-				<div>
-					{selectedImage && (
-						<Image
-							src={selectedImage}
-							alt="banner-image"
-							width={600}
-							height={600}
-							className="w-full"
-							priority
-						></Image>
-					)}
-				</div>
+
 				<div>
 					<label htmlFor="title" className="text-sm text-gray-600">
 						Post htmlContent
@@ -92,11 +60,6 @@ const AddPostForm = () => {
 					Submit
 				</button>
 			</form>
-			<ImageGallery
-				onSelect={onImageSelect}
-				visible={showImageGallery}
-				onClose={setShowImageGallery}
-			/>
 		</div>
 	);
 };
