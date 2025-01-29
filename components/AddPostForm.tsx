@@ -1,7 +1,7 @@
 'use client';
 // import { addNewBlogPost } from '@/actions/postActions';
 
-import { default as RichEditor } from '@/components/richeditor/RichEditor';
+import { default as RichEditor } from '@/components/RichEditor/RichEditor';
 import { JSONContent } from '@tiptap/react';
 import React, { useState } from 'react';
 const AddPostForm = () => {
@@ -26,6 +26,8 @@ const AddPostForm = () => {
 		formData.append('jsonContent', jsonContent);
 
 		// await addNewBlogPost(formData);
+		console.log(formData.get('title'));
+		console.log(formData.get('htmlContent'));
 	};
 
 	return (

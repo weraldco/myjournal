@@ -1,19 +1,22 @@
 import clsx from 'clsx';
-import React, { ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 
 interface Props {
 	children: ReactNode;
-	activate?: boolean;
+	active?: boolean;
 	onClick?(): void;
 }
-export default function ToolButton({ children, activate, onClick }: Props) {
+
+const ToolButton: FC<Props> = ({ children, active, onClick }) => {
 	return (
 		<button
-			className={clsx('p-2', activate ? 'bg-black text-white' : 'text-black')}
-			onClick={onClick}
 			type="button"
+			onClick={onClick}
+			className={clsx('p-2', active ? 'bg-black text-white' : 'text-black')}
 		>
 			{children}
 		</button>
 	);
-}
+};
+
+export default ToolButton;

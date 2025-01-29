@@ -1,5 +1,4 @@
-import { ChainedCommands, Editor } from '@tiptap/react';
-import React, { ChangeEventHandler } from 'react';
+import { FC } from 'react';
 import {
 	BiAlignLeft,
 	BiAlignMiddle,
@@ -15,62 +14,59 @@ import {
 } from 'react-icons/bi';
 import ToolButton from './ToolButton';
 
+import { ChainedCommands, Editor } from '@tiptap/react';
+
 interface Props {
 	editor: Editor | null;
 }
 
+type TaskType = (typeof tools)[number]['task'];
+
 const tools = [
 	{
 		task: 'bold',
-		icon: <BiBold />,
+		icon: <BiBold size="18" />,
 	},
 	{
 		task: 'italic',
-		icon: <BiItalic />,
+		icon: <BiItalic size="18" />,
 	},
 	{
 		task: 'underline',
-		icon: <BiUnderline />,
+		icon: <BiUnderline size="18" />,
 	},
 	{
 		task: 'strike',
-		icon: <BiStrikethrough />,
+		icon: <BiStrikethrough size="18" />,
 	},
 	{
 		task: 'code',
-		icon: <BiCodeAlt />,
+		icon: <BiCodeAlt size="18" />,
 	},
 	{
 		task: 'codeblock',
-		icon: <BiCodeCurly />,
+		icon: <BiCodeCurly size="18" />,
 	},
 	{
 		task: 'left',
-		icon: <BiAlignLeft />,
+		icon: <BiAlignLeft size="18" />,
 	},
 	{
 		task: 'center',
-		icon: <BiAlignMiddle />,
+		icon: <BiAlignMiddle size="18" />,
 	},
 	{
 		task: 'right',
-		icon: <BiAlignRight />,
+		icon: <BiAlignRight size="18" />,
 	},
 	{
 		task: 'orderList',
-		icon: <BiListOl />,
+		icon: <BiListOl size="18" />,
 	},
 	{
 		task: 'bulletList',
-		icon: <BiListUl />,
+		icon: <BiListUl size="18" />,
 	},
-] as const;
-
-const headingOptions = [
-	{ task: 'p', value: 'Paragraph' },
-	{ task: 'h1', value: 'Heading 1' },
-	{ task: 'h2', value: 'Heading 2' },
-	{ task: 'h3', value: 'Heading 3' },
 ] as const;
 
 const chainMethod = (
@@ -82,10 +78,7 @@ const chainMethod = (
 	command(editor.chain().focus()).run();
 };
 
-type TaskType = (typeof tools)[number]['task'];
-type HeadingType = (typeof headingOptions)[number]['task'];
-
-export default function Tools({ editor }: Props) {
+const Tools: FC<Props> = ({ editor }) => {
 	const handleOnClick = (task: TaskType) => {
 		switch (task) {
 			case 'bold':
@@ -111,63 +104,18 @@ export default function Tools({ editor }: Props) {
 				return chainMethod(editor, (chain) => chain.setTextAlign('center'));
 			case 'right':
 				return chainMethod(editor, (chain) => chain.setTextAlign('right'));
+			// case 'image':
+			// 	return onImageSelection && onImageSelection();
 		}
 	};
-
-	const handleHeadingSelection: ChangeEventHandler<HTMLSelectElement> = ({
-		target,
-	}) => {
-		const { value } = target as { value: HeadingType };
-
-		switch (value) {
-			case 'p':
-				return chainMethod(editor, (chain) => chain.setParagraph());
-			case 'h1':
-				return chainMethod(editor, (chain) =>
-					chain.toggleHeading({ level: 1 })
-				);
-			case 'h2':
-				return chainMethod(editor, (chain) =>
-					chain.toggleHeading({ level: 2 })
-				);
-			case 'h3':
-				return chainMethod(editor, (chain) =>
-					chain.toggleHeading({ level: 3 })
-				);
-		}
-	};
-
-	const getSelectedHeading = (): HeadingType => {
-		let result: HeadingType = 'p';
-		if (editor?.isActive('heading', { level: 1 })) result = 'h1';
-		if (editor?.isActive('heading', { level: 2 })) result = 'h2';
-		if (editor?.isActive('heading', { level: 3 })) result = 'h3';
-
-		return result;
-	};
-
 	return (
-		<div className="flex items-start space-x-1">
-			<select
-				value={getSelectedHeading()}
-				className="p-2"
-				onChange={handleHeadingSelection}
-			>
-				{headingOptions.map((item, i) => {
-					return (
-						<option key={i} value={item.task}>
-							{item.value}
-						</option>
-					);
-				})}
-			</select>
-
+		<div className="grid grid-flow-col justify-center">
 			{tools.map(({ icon, task }, i) => {
 				return (
 					<ToolButton
 						key={i}
 						onClick={() => handleOnClick(task)}
-						activate={
+						active={
 							editor?.isActive(task) || editor?.isActive({ textAlign: task })
 						}
 					>
@@ -177,4 +125,6 @@ export default function Tools({ editor }: Props) {
 			})}
 		</div>
 	);
-}
+};
+
+export default Tools;
