@@ -1,7 +1,7 @@
 'use client';
 // import { addNewBlogPost } from '@/actions/postActions';
 
-import { default as RichEditor } from '@/components/RichEditor/RichEditor';
+import { default as RichEditor } from '@/components/richeditor/RichEditor';
 import { JSONContent } from '@tiptap/react';
 import React, { useState } from 'react';
 const AddPostForm = () => {
@@ -31,16 +31,16 @@ const AddPostForm = () => {
 	};
 
 	return (
-		<div>
+		<div className=" w-full">
 			<form onSubmit={formSubmit} className="flex flex-col gap-4">
-				<h1 className="text-2xl font-bold">Adding New Post</h1>
+				<h1 className="text-2xl font-bold">Adding New Journal</h1>
 				<div>
 					<label htmlFor="title" className="text-sm text-gray-600">
-						Post Title
+						Journal Title
 					</label>
 					<input
 						type="text"
-						placeholder="Enter a title for your post.."
+						placeholder="Enter a title for your journal.."
 						value={title}
 						onChange={(e) => {
 							setTitle(e.target.value);
@@ -52,7 +52,7 @@ const AddPostForm = () => {
 
 				<div>
 					<label htmlFor="title" className="text-sm text-gray-600">
-						Post htmlContent
+						Journal Content
 					</label>
 					<div className="border border-gray-600 rounded p-2">
 						<RichEditor onValueChange={handleEditorChange} />
