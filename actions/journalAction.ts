@@ -1,6 +1,8 @@
 'use server';
 
 import { prisma } from '@/db';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 export const addNewData = async () => {
 	await prisma.journal.create({
@@ -17,6 +19,34 @@ export const getAllData = async () => {
 	try {
 		const journal = await prisma.journal.findMany();
 		if (journal) return journal;
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+export const addNewJournal = async (formData: FormData) => {
+	const rawData = {
+		slug: (formData.get('title') as string).split(' ').join('-').toLowerCase(),
+		title: formData.get('title') as string,
+		body: formData.get('htmlContent') as string,
+		authorId: '679d3dcf82a9997e5c8f19e8',
+	};
+	try {
+		await prisma.journal.create({
+			data: rawData,
+		});
+	} catch (error) {
+		console.error(error);
+	} finally {
+		revalidatePath('/journal');
+		redirect('/journal');
+	}
+};
+
+export const getDataBySlug = async (slug: string) => {
+	try {
+		const data = await prisma.journal.findUnique({ where: { slug } });
+		if (data) return data;
 	} catch (error) {
 		console.error(error);
 	}

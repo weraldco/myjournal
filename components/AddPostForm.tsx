@@ -1,4 +1,5 @@
 'use client';
+import { addNewJournal } from '@/actions/journalAction';
 // import { addNewBlogPost } from '@/actions/postActions';
 
 import { default as RichEditor } from '@/components/richeditor/RichEditor';
@@ -25,9 +26,7 @@ const AddPostForm = () => {
 		formData.append('htmlContent', htmlContent);
 		formData.append('jsonContent', jsonContent);
 
-		// await addNewBlogPost(formData);
-		console.log(formData.get('title'));
-		console.log(formData.get('htmlContent'));
+		await addNewJournal(formData);
 	};
 
 	return (

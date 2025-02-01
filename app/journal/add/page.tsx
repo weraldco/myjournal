@@ -1,4 +1,3 @@
-'use client';
 import AddPostForm from '@/components/AddPostForm';
 // import RichEditor from '@/components/richeditor/RichEditor';
 import React from 'react';
