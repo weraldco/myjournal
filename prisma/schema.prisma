@@ -25,8 +25,9 @@ model Journal {
 }
 
 model User {
-  id    String    @id @default(auto()) @map("_id") @db.ObjectId
-  email String    @unique
-  name  String?
-  posts Journal[]
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  email    String    @unique
+  name     String?
+  password String
+  posts    Journal[]
 }
